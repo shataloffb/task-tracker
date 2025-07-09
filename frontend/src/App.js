@@ -1,37 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import KanbanScreen from './screens/KanbanScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [title, setTitle] = useState('');
+  const [screen, setScreen] = useState('kanban');
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/tasks')
-         .then(res => setTasks(res.data));
-  }, []);
+  const navigate = scr => setScreen(scr);
 
-  const addTask = () => {
-    axios.post('http://localhost:5000/api/tasks', { title })
-         .then(res => setTasks([res.data, ...tasks]));
-    setTitle('');
-  };
-
-  return (
-    <div style={{ padding: '20px' }}>
-      <h1>Мой Task Tracker</h1>
-      <input
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        placeholder="Новая задача"
-      />
-      <button onClick={addTask}>Добавить</button>
-      <ul>
-        {tasks.map(t => (
-          <li key={t._id}>{t.title} — {t.status}</li>
-        ))}
-      </ul>
-    </div>
-  );
+  if (screen === 'settings') {
+    return <SettingsScreen navigate={navigate} />;
+  }
+  return <KanbanScreen navigate={navigate} />;
 }
 
 export default App;
