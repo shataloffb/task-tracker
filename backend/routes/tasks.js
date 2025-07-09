@@ -3,12 +3,15 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema({
-  title: { type: String, required: true },
+  title:       { type: String, required: true },
+  type:        { type: String, default: '' },      
   description: String,
-  status: { type: String, enum: ['pending','in-progress','done'], default: 'pending' },
-  dueDate: Date,
+  status:      { type: String, enum: ['pending','in-progress','done'], default: 'pending' },
+  dueDate:     Date,
 }, { timestamps: true });
+
 const Task = mongoose.model('Task', taskSchema);
+
 
 router.get('/', async (req, res) => {
   const tasks = await Task.find().sort({ createdAt: -1 });
